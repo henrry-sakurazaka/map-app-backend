@@ -17,51 +17,68 @@ Store.destroy_all
 User.destroy_all
 puts "Database cleaned!"
 
-puts "Creating Users..."
-# ユーザーを作成（レビュー投稿に必要）
-user1 = User.create!(email: 'alice@example.com', password: 'password', password_confirmation: 'password')
-user2 = User.create!(email: 'bob@example.com', password: 'password', password_confirmation: 'password')
-puts "Users created: #{User.count}"
+# puts "Creating Users..."
+# # ユーザーを作成（レビュー投稿に必要）
+# user1 = User.create!(email: 'alice@example.com', password: 'password', password_confirmation: 'password')
+# user2 = User.create!(email: 'bob@example.com', password: 'password', password_confirmation: 'password')
+# puts "Users created: #{User.count}"
 
-puts "Creating Stores..."
-# 1. 緯度・経度を含む店舗データを作成
-store1 = Store.create!(
-  name: "レトロ喫茶 モカ",
-  description: "昔ながらの落ち着いた雰囲気の喫茶店。絶品オムライスが人気。",
-  # 例: 緯度経度は東京駅周辺の適当な値を設定
-  latitude: 35.681236,
-  longitude: 139.767125,
-  address: "東京都千代田区",
-  phone_number: "03-xxxx-xxxx"
-)
+# puts "Creating Stores..."
+# # 1. 緯度・経度を含む店舗データを作成
+# store1 = Store.create!(
+#   name: "レトロ喫茶 モカ",
+#   description: "昔ながらの落ち着いた雰囲気の喫茶店。絶品オムライスが人気。",
+#   # 例: 緯度経度は東京駅周辺の適当な値を設定
+#   latitude: 35.681236,
+#   longitude: 139.767125,
+#   address: "東京都千代田区",
+#   phone_number: "03-xxxx-xxxx"
+# )
 
-store2 = Store.create!(
-  name: "地中海バル オリーブ",
-  description: "新鮮な魚介とワインが楽しめる地中海料理のバル。テラス席あり。",
-  # 例: 上記から少し離れた地点
-  latitude: 35.685000,
-  longitude: 139.760000,
-  address: "東京都千代田区丸の内",
-  phone_number: "03-yyyy-yyyy"
-)
+# store2 = Store.create!(
+#   name: "地中海バル オリーブ",
+#   description: "新鮮な魚介とワインが楽しめる地中海料理のバル。テラス席あり。",
+#   # 例: 上記から少し離れた地点
+#   latitude: 35.685000,
+#   longitude: 139.760000,
+#   address: "東京都千代田区丸の内",
+#   phone_number: "03-yyyy-yyyy"
+# )
 
-puts "Stores created: #{Store.count}"
+# puts "Stores created: #{Store.count}"
 
-puts "Creating Reviews..."
-# 2. 口コミデータを作成し、作成したユーザーと店舗に関連付ける
-Review.create!(
-  store: store1,
-  user: user1,
-  rating: 5,
-  content: "オムライスが最高でした！店主の方も親切でまた来ます。"
-)
+# puts "Creating Reviews..."
+# # 2. 口コミデータを作成し、作成したユーザーと店舗に関連付ける
+# Review.create!(
+#   store: store1,
+#   user: user1,
+#   rating: 5,
+#   content: "オムライスが最高でした！店主の方も親切でまた来ます。"
+# )
 
-Review.create!(
-  store: store2,
-  user: user2,
-  rating: 4,
-  content: "パエリアが美味しかったですが、少し賑やかすぎました。"
-)
+# Review.create!(
+#   store: store2,
+#   user: user2,
+#   rating: 4,
+#   content: "パエリアが美味しかったですが、少し賑やかすぎました。"
+# )
+
+User.find_or_create_by!(email: "akira@example.com") do |user|
+  user.name = "Akira Sakamoto"
+  user.provider = "local"
+  user.uid = SecureRandom.uuid
+  user.password = "password123"
+  user.password_confirmation = "password123"
+end
 puts "Reviews created: #{Review.count}"
 
-puts "Seeding complete!"
+
+# --- 以下はコメントアウト ---
+# puts "Creating Stores..."
+# Store.create!(name: "Sample Cafe", address: "Tokyo")
+# Store.create!(name: "Sample Restaurant", address: "Tokyo")
+# puts "Stores created: #{Store.count}"
+
+# puts "Creating Reviews..."
+# Review.create!(user_id: 1, store_id: 1, content: "Great!", rating: 5)
+# puts "Reviews created: #{Review.count}"

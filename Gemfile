@@ -39,6 +39,17 @@ gem "rack-cors"
 
 gem 'bcrypt', '~> 3.1.18'
 
+gem 'omniauth'
+
+gem 'omniauth-google-oauth2'
+
+gem 'omniauth-apple'
+
+gem 'omniauth-line'
+
+gem 'jwt'
+
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

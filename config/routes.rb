@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     get "ogp_preview", to: "ogp_preview#show"
     get "stores_controller", to: "stores_controller#index"
     namespace :v1 do
+      post "auth/login", to: "sessions#create"
+      post "auth/register", to: "sessions#register" #任意で新規登録
       # GET /api/v1/stores に対応するルートを定義
       resources :stores, only: [:index]    
     end
