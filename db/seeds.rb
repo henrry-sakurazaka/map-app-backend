@@ -63,13 +63,16 @@ puts "Database cleaned!"
 #   content: "パエリアが美味しかったですが、少し賑やかすぎました。"
 # )
 
-User.find_or_create_by!(email: "akira@example.com") do |user|
-  user.name = "Akira Sakamoto"
+User.find_or_create_by!(email: "guest@example.com") do |user|
+  user.name = "Guest User"
   user.provider = "local"
   user.uid = SecureRandom.uuid
-  user.password = "password123"
-  user.password_confirmation = "password123"
+  user.password = "guest123"
+  user.password_confirmation = "guest123"
 end
+
+puts "✅ Guest user ready for login (guest@example.com / guest123)"
+
 puts "Reviews created: #{Review.count}"
 
 

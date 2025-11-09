@@ -1,6 +1,6 @@
 # app/controllers/api/v1/sessions_controller.rb
-module api
-    module v1
+module Api
+    module V1
         class SessionsController < ApplicationController
             #POST /api/v1/auth/register
             def register

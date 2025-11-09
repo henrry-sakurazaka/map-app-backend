@@ -1,19 +1,26 @@
-# config/routes.rb
-
 Rails.application.routes.draw do
-  # APIバージョン1を定義
   namespace :api do
-    get "reverse-geocode", to: "reverse_geocode#index"
-    get "ogp_preview", to: "ogp_preview#show"
-    get "stores_controller", to: "stores_controller#index"
     namespace :v1 do
-      post "auth/login", to: "sessions#create"
-      post "auth/register", to: "sessions#register" #任意で新規登録
-      # GET /api/v1/stores に対応するルートを定義
-      resources :stores, only: [:index]    
+      # --- 通常ログイン / 登録系 ---
+      post "auth/login",    to: "sessions#create"
+      post "auth/register", to: "sessions#register"
+
+      # --- ゲストログイン ---
+      namespace :auth do
+        post :guest, to: "guest#create"
+      end
+
+      # --- OmniAuth ---
+      get "oauth/:provider",          to: "omniauth_callbacks#passthru"
+      get "oauth/:provider/callback", to: "omniauth_callbacks#callback"
+
+      # --- その他API ---
+      get "reverse-geocode", to: "reverse_geocode#index"
+      get "ogp_preview",     to: "ogp_preview#show"
+      resources :stores, only: [:index]
     end
   end
-   # アプリケーションの健全性チェック用のルート（そのまま残す）
+
+  # 健康チェック
   get "up" => "rails/health#show", as: :rails_health_check
-  # その他のルートがあれば追記
 end
