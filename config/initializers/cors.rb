@@ -6,6 +6,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     if Rails.env.development?
       allowed_origins << 'http://localhost:3000'  # React CRA
       allowed_origins << 'http://localhost:5173'  # Vite
+      allowed_origins << 'https://dev-auth.offsetcodecraft.site'
     elsif Rails.env.production?
       allowed_origins << ENV.fetch('FRONTEND_URL', 'https://your-app-name.netlify.app')
     end
@@ -15,6 +16,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     resource '*',
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
-      credentials: false # Cookie/セッションを使う場合
+      credentials: true # Cookie/セッションを使う場合に必要
   end
 end

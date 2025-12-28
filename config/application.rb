@@ -1,6 +1,8 @@
 require_relative "boot"
 
 require "rails/all"
+require "omniauth"
+require "omniauth-google-oauth2"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -31,7 +33,6 @@ module MapAppBackend
 
     # Rails APIモードでもセッションを使えるようにする
     config.middleware.use ActionDispatch::Cookies
-    config.middleware.use ActionDispatch::Session::CookieStore, key: '_your_app_session'
-
+    config.middleware.use ActionDispatch::Session::CookieStore, key: "_myapp_session"
   end
 end

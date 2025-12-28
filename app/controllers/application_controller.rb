@@ -1,24 +1,30 @@
 class ApplicationController < ActionController::API
-    # 既存の認証検証メソッド
-    def authorize_request
-        header = request.headers["Authorization"]
-        token = header.split(" ").last if header
-        begin
-            # Rails.application.secret_key_base を使用してトークンをデコード
-            decode = JWT.decode(token, Rails.application.secret_key_base)[0]
-            @current_user = User.find(decode["user_id"])
-        rescue JWT::DecodeError => e
-            # JWTデコードエラー処理
-            render json: { error: "Unauthorized: #{e.message}" }, status: :unauthorized
-        rescue ActiveRecord::RecordNotFound => e
-            # ユーザーが見つからない場合のエラー処理
-            render json: { error: "Unauthorized: User not found." }, status: :unauthorized
-        end
+  # API向けの認証フィルター
+  before_action :authenticate_user!
+
+  # JWTトークンからユーザーを復元して `@current_user` にセットします
+  def authenticate_user!
+    token = request.headers['Authorization']&.split(' ')&.last
+
+    unless token
+      render json: { error: 'Unauthorized: No token provided' }, status: :unauthorized and return
     end
 
-    # ----------------------------------------------------
-    # ゲストログインに必要な未定義のメソッド
-    # ----------------------------------------------------
+    begin
+      decoded = JWT.decode(token, Rails.application.secret_key_base)[0]
+      @current_user = User.find(decoded['user_id'])
+    rescue JWT::DecodeError => e
+      # JWTデコードエラー処理
+      render json: { error: "Unauthorized: #{e.message}" }, status: :unauthorized
+    rescue ActiveRecord::RecordNotFound => e
+      # ユーザーが見つからない場合のエラー処理
+      render json: { error: 'Unauthorized: User not found.' }, status: :unauthorized
+    end
+  end
+
+  # ----------------------------------------------------
+  # ゲストログインに必要なメソッド
+  # ----------------------------------------------------
     private
 
     # 新しいJWTトークンを生成するメソッド

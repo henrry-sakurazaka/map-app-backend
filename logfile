@@ -1,0 +1,4 @@
+2025-12-23 07:43:04.529 JST [8222] FATAL:  lock file "postmaster.pid" already exists
+2025-12-23 07:43:04.529 JST [8222] HINT:  Is another postmaster (PID 504) running in data directory "/usr/local/var/postgresql@14"?
+2025-12-23 07:45:14.074 JST [8682] FATAL:  lock file "postmaster.pid" already exists
+2025-12-23 07:45:14.074 JST [8682] HINT:  Is another postmaster (PID 8611) running in data directory "/usr/local/var/postgresql@14"?

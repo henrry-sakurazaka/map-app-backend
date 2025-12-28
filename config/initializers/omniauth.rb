@@ -1,9 +1,14 @@
-# Rails.application.config.middleware.use OmniAuth::Builder do
+# OmniAuth 2.x: GET によるリクエスト開始を許可（フロントからの GET に対応させる）
+OmniAuth.config.allowed_request_methods = [:get, :post]
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   OmniAuth.config.full_host = lambda do |env|
-    request = Rack::Request.new(env)
-    ENV.fetch('FRONTEND_URL', "http://localhost:5173")
+    # Cloudflare 経由の API URL を優先
+    ENV.fetch('API_BASE_URL') do
+      # フォールバック（ローカル直叩き用）
+      request = Rack::Request.new(env)
+      "#{request.scheme}://#{request.host_with_port}"
+    end
   end
 
   # Google
@@ -13,7 +18,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            scope: 'email,profile',
            access_type: 'offline',
            prompt: 'select_account',
-           path_prefix: '/api/v1/oauth',
            setup: true
 
   # LINE
@@ -25,7 +29,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            path_prefix: '/api/v1/oauth',
            setup: true
 
-  # Apple
+  # Apple（※ Apple は redirect_uri 明示が必要なので触らない）
   provider :apple,
            ENV['APPLE_CLIENT_ID'],
            '',
@@ -39,8 +43,13 @@ Rails.application.config.middleware.use OmniAuth::Builder do
              setup: true
            }
 
-  OmniAuth.config.path_prefix = '/api/v1/oauth'
+   OmniAuth.config.path_prefix = '/api/v1/oauth'
 end
 
-# セッションを使わない設定
-OmniAuth.config.request_validation_phase = lambda { |env| true }
+
+# セッションを使わない設定（そのままでOK）
+OmniAuth.config.allowed_request_methods = [:get, :post]
+
+# セッションを使わない設定（そのままでOK）
+OmniAuth.config.request_validation_phase = lambda { |_env| true }
+
