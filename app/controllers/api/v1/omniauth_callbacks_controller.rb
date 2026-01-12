@@ -10,6 +10,8 @@ module Api
         Rails.logger.info "=== COOKIE: #{request.cookies.inspect} ==="
         Rails.logger.info "=== SESSION: #{session.to_hash.inspect} ==="
         Rails.logger.info "=== omniauth.state: #{session['omniauth.state'].inspect} ==="
+        Rails.logger.error "=== OMNIAUTH AUTH ==="
+        Rails.logger.error request.env['omniauth.auth'].inspect
         auth = request.env['omniauth.auth']
         provider = params[:provider]
 
@@ -40,7 +42,7 @@ module Api
       # OmniAuth が実際の provider ルート (/api/v1/oauth/:provider) を処理するので
       # ここでは未実装で 404 を返すだけにする
       def passthru
-        render json: { error: "Not implemented" }, status: :not_found
+        # render json: { error: "Not implemented" }, status: :not_found
       end
 
     end

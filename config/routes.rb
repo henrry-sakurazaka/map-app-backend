@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  get "/auth/:provider",
+    to: "api/v1/omniauth_callbacks#passthru",
+    constraints: { provider: "line" }
+
+  get "/auth/:provider/callback",
+      to: "api/v1/omniauth_callbacks#callback"
+
+
   namespace :api do
     namespace :v1 do
       get  "oauth/:provider", to: "omniauth_callbacks#passthru"
