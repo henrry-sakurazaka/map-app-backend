@@ -1,6 +1,6 @@
 # app/controllers/api/reverse_geocode_controller.rb
-require 'net/http'
-require 'json'
+require "net/http"
+require "json"
 
 class Api::ReverseGeocodeController < ApplicationController
   def index

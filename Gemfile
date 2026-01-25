@@ -37,23 +37,23 @@ gem "thruster", require: false
 
 gem "rack-cors"
 
-gem 'bcrypt', '~> 3.1.18'
+gem "bcrypt", "~> 3.1.18"
 
-gem 'omniauth'
+gem "omniauth"
 
-gem 'omniauth-google-oauth2'
+gem "omniauth-google-oauth2"
 
-gem 'omniauth-apple'
+gem "omniauth-apple"
 
-gem 'omniauth-line'
+gem "omniauth-line"
 
-gem 'jwt'
+gem "jwt"
 
-gem 'devise'
+gem "devise"
 
-gem 'omniauth-rails_csrf_protection'
+gem "omniauth-rails_csrf_protection"
 
-gem 'dotenv-rails', groups: [:development, :test]
+gem "dotenv-rails", groups: [ :development, :test ]
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -65,4 +65,3 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 end
-

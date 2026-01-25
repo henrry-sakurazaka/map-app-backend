@@ -1,9 +1,9 @@
 # OmniAuth 2.x: GET によるリクエスト開始を許可（フロントからの GET に対応させる）
-OmniAuth.config.allowed_request_methods = [:get, :post]
+OmniAuth.config.allowed_request_methods = [ :get, :post ]
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   OmniAuth.config.full_host = lambda do |env|
-    ENV.fetch('API_BASE_URL') do
+    ENV.fetch("API_BASE_URL") do
       # フォールバック（ローカル直叩き用）
       request = Rack::Request.new(env)
       "#{request.scheme}://#{request.host_with_port}"
@@ -12,39 +12,38 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 
   # Google
   provider :google_oauth2,
-           ENV['GOOGLE_CLIENT_ID'],
-           ENV['GOOGLE_CLIENT_SECRET'],
-           scope: 'email,profile',
-           access_type: 'offline',
-           prompt: 'select_account',
+           ENV["GOOGLE_CLIENT_ID"],
+           ENV["GOOGLE_CLIENT_SECRET"],
+           scope: "email,profile",
+           access_type: "offline",
+           prompt: "select_account",
            setup: true
 
   # LINE
   provider :line,
-           ENV['LINE_CLIENT_ID'],
-           ENV['LINE_CLIENT_SECRET'],
-           scope: 'profile openid email',
-           bot_prompt: 'aggressive',
+           ENV["LINE_CLIENT_ID"],
+           ENV["LINE_CLIENT_SECRET"],
+           scope: "profile openid email",
+           bot_prompt: "aggressive",
            setup: true,
            scope: "profile openid email"
 
-  # X
-  # provider :twitter,
-  #          ENV['TWITTER_API_KEY'],
-  #          ENV['TWITTER_API_SECRET'],
-  #          {
-  #            scope: 'email',
-  #            authorize_params: {
-  #             force_login: 'true'
-  #            }
-          #  }
+   # X
+   # provider :twitter,
+   #          ENV['TWITTER_API_KEY'],
+   #          ENV['TWITTER_API_SECRET'],
+   #          {
+   #            scope: 'email',
+   #            authorize_params: {
+   #             force_login: 'true'
+   #            }
+   #  }
 
-   OmniAuth.config.path_prefix = '/api/v1/oauth'
+   OmniAuth.config.path_prefix = "/api/v1/oauth"
 end
 
 
 # セッションを使わない設定（そのままでOK）
-OmniAuth.config.allowed_request_methods = [:get, :post]
+OmniAuth.config.allowed_request_methods = [ :get, :post ]
 
 OmniAuth.config.request_validation_phase = lambda { |_env| true }
-

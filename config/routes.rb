@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       get "reverse-geocode", to: "reverse_geocode#index"
       get "ogp_preview",     to: "ogp_preview#show"
 
-      resources :stores, only: [:index]
+      resources :stores, only: [ :index ]
 
       # namespace :auth do
       #   post "refresh", to: "refresh#refresh"
@@ -26,8 +26,3 @@ Rails.application.routes.draw do
     end
   end
 end
-
-
-
-
-

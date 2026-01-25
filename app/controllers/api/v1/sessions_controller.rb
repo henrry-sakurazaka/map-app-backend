@@ -3,9 +3,9 @@ module Api
     module V1
         class SessionsController < ApplicationController
             # 公開エンドポイント（登録・ログイン）は認証不要
-            skip_before_action :authenticate_user!, only: [:register, :create]
+            skip_before_action :authenticate_user!, only: [ :register, :create ]
 
-            #POST /api/v1/auth/register
+            # POST /api/v1/auth/register
             def register
                 user = User.new(register_params)
                 if user.save
@@ -26,7 +26,7 @@ module Api
                 end
             end
 
-            private 
+            private
 
             def register_params
                 params.require(:user).permit(:name, :email, :password, :password_confirmation)
@@ -51,4 +51,3 @@ module Api
         end
     end
 end
-

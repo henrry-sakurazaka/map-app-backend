@@ -2,17 +2,11 @@ module Api
   module V1
     class OmniauthCallbacksController < ApplicationController
       # callback と passthru は認証不要
-      skip_before_action :authenticate_user!, only: [:callback, :passthru]
+      skip_before_action :authenticate_user!, only: [ :callback, :passthru ]
 
       # OAuth コールバック
       def callback
-        Rails.logger.info "=== CALLBACK PATH: #{request.fullpath} ==="
-        Rails.logger.info "=== COOKIE: #{request.cookies.inspect} ==="
-        Rails.logger.info "=== SESSION: #{session.to_hash.inspect} ==="
-        Rails.logger.info "=== omniauth.state: #{session['omniauth.state'].inspect} ==="
-        Rails.logger.error "=== OMNIAUTH AUTH ==="
-        Rails.logger.error request.env['omniauth.auth'].inspect
-        auth = request.env['omniauth.auth']
+        auth = request.env["omniauth.auth"]
         provider = params[:provider]
 
         # ユーザー作成または取得
@@ -23,12 +17,6 @@ module Api
           u.password  = SecureRandom.hex(10)
         end
 
-        # # # JWT 生成
-        # token = JWT.encode(
-        #   { user_id: user.id, exp: 24.hours.from_now.to_i },
-        #   Rails.application.secret_key_base
-        # )
-       
         token = generate_jwt(user)
 
         frontend_url = ENV.fetch("FRONTEND_URL", "http://localhost:5173")
@@ -46,9 +34,6 @@ module Api
       def passthru
         # render json: { error: "Not implemented" }, status: :not_found
       end
-
     end
   end
 end
-
-

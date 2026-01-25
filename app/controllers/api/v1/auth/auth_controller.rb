@@ -4,12 +4,12 @@ module Api
     module Auth
       class AuthController < ApplicationController
         # 公開エンドポイント（ログイン・ゲストなど）は認証不要
-        skip_before_action :authenticate_user!, only: [:guest, :login]
+        skip_before_action :authenticate_user!, only: [ :guest, :login ]
 
         # JWTなどで認証している場合、ヘッダーのトークンを使って認証
-        before_action :authenticate_user!, only: [:current]
+        before_action :authenticate_user!, only: [ :current ]
 
-        # GET /api/v1/auth/current_user
+          # GET /api/v1/auth/current_user
           def current
             # ヘッダーに JWT があればデコードして current_user をセット
             token = request.headers["Authorization"]&.split(" ")&.last
@@ -67,7 +67,7 @@ module Api
 
           private
 
-        # ユーザー情報をJSON用に整形
+          # ユーザー情報をJSON用に整形
           def user_json(user)
             {
               id: user.id,
@@ -79,7 +79,7 @@ module Api
             }
           end
 
-        # JWT生成例
+          # JWT生成例
           def generate_jwt(user)
             payload = { user_id: user.id, exp: 24.hours.from_now.to_i }
             JWT.encode(payload, Rails.application.credentials.secret_key_base)
@@ -88,7 +88,7 @@ module Api
           def current_user
             @current_user
           end
-        end
       end
     end
   end
+end
