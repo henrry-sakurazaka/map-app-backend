@@ -1,4 +1,4 @@
-# OmniAuth 2.x: GET によるリクエスト開始を許可（フロントからの GET に対応させる）
+# OmniAuth 2.x: GET によるリクエスト開始を許可（フロントからの GET に対応）
 OmniAuth.config.allowed_request_methods = [ :get, :post ]
 
 Rails.application.config.middleware.use OmniAuth::Builder do
@@ -25,25 +25,11 @@ Rails.application.config.middleware.use OmniAuth::Builder do
            ENV["LINE_CLIENT_SECRET"],
            scope: "profile openid email",
            bot_prompt: "aggressive",
-           setup: true,
-           scope: "profile openid email"
-
-   # X
-   # provider :twitter,
-   #          ENV['TWITTER_API_KEY'],
-   #          ENV['TWITTER_API_SECRET'],
-   #          {
-   #            scope: 'email',
-   #            authorize_params: {
-   #             force_login: 'true'
-   #            }
-   #  }
-
-   OmniAuth.config.path_prefix = "/api/v1/oauth"
+           setup: true
 end
 
+# OmniAuth のエンドポイントを API 配下に変更
+OmniAuth.config.path_prefix = "/api/v1/oauth"
 
-# セッションを使わない設定（そのままでOK）
-OmniAuth.config.allowed_request_methods = [ :get, :post ]
-
+# リクエスト検証フェーズを無効化（API-only + SPA 用）
 OmniAuth.config.request_validation_phase = lambda { |_env| true }

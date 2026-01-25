@@ -17,6 +17,12 @@ module Api
           u.password  = SecureRandom.hex(10)
         end
 
+        # # # JWT 生成
+        # token = JWT.encode(
+        #   { user_id: user.id, exp: 24.hours.from_now.to_i },
+        #   Rails.application.secret_key_base
+        # )
+
         token = generate_jwt(user)
 
         frontend_url = ENV.fetch("FRONTEND_URL", "http://localhost:5173")
