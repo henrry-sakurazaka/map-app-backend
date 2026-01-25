@@ -40,5 +40,10 @@ module MapAppBackend
 
     # config.middleware.use ::Middleware::OauthRequestLogger
 
+    # config/application.rb
   end
+    unless Rails.env.test?
+      config.middleware.use Middleware::OauthRequestLogger
+    end
+
 end
