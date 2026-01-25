@@ -1,14 +1,28 @@
-# config/routes.rb
-
 Rails.application.routes.draw do
-  # APIバージョン1を定義
+  get "/auth/:provider",
+    to: "api/v1/omniauth_callbacks#passthru",
+    constraints: { provider: "line" }
+
+  get "/auth/:provider/callback",
+      to: "api/v1/omniauth_callbacks#callback"
+
   namespace :api do
     namespace :v1 do
-      # GET /api/v1/stores に対応するルートを定義
-      resources :stores, only: [:index]
+      get  "oauth/:provider", to: "omniauth_callbacks#passthru"
+      get  "oauth/:provider/callback", to: "omniauth_callbacks#callback"
+      post "auth/login",        to: "auth/auth#login"
+      post "auth/register",     to: "auth/auth#register"
+      post "auth/guest",        to: "auth/guest#create"
+      get  "auth/current_user", to: "auth/auth#current"
+
+      get "reverse-geocode", to: "reverse_geocode#index"
+      get "ogp_preview",     to: "ogp_preview#show"
+
+      resources :stores, only: [ :index ]
+
+      # namespace :auth do
+      #   post "refresh", to: "refresh#refresh"
+      # end
     end
   end
-   # アプリケーションの健全性チェック用のルート（そのまま残す）
-  get "up" => "rails/health#show", as: :rails_health_check
-  # その他のルートがあれば追記
 end
