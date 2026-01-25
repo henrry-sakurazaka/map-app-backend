@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   get "/auth/:provider/callback",
       to: "api/v1/omniauth_callbacks#callback"
 
-
   namespace :api do
     namespace :v1 do
       get  "oauth/:provider", to: "omniauth_callbacks#passthru"
@@ -20,6 +19,10 @@ Rails.application.routes.draw do
       get "ogp_preview",     to: "ogp_preview#show"
 
       resources :stores, only: [:index]
+
+      # namespace :auth do
+      #   post "refresh", to: "refresh#refresh"
+      # end
     end
   end
 end
