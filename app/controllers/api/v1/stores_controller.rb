@@ -3,7 +3,7 @@
 module Api
   module V1
     class StoresController < ApplicationController
-      skip_before_action :authenticate_user!, only: [:index]
+      skip_before_action :authenticate_user!, only: [ :index ]
 
       # CSRFトークンの検証をスキップ（APIのため）
       # skip_before_action :verify_authenticity_token
