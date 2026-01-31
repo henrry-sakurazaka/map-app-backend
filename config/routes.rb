@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       # namespace :auth do
       #   post "refresh", to: "refresh#refresh"
       # end
+      # フロント用ルート（React/Vite）
+      root to: "home#index"  # "/" にアクセスされたら home#index
+      get "*path", to: "home#index", constraints: ->(req) { !req.path.starts_with?("/rails/active_storage") }
     end
   end
 end
