@@ -8,7 +8,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
       allowed_origins << "http://localhost:5173"  # Vite
       allowed_origins << "https://dev-auth.offsetcodecraft.site"
     elsif Rails.env.production?
-      allowed_origins << ENV.fetch("FRONTEND_URL", "https://your-app-name.netlify.app")
+      allowed_origins << ENV.fetch("FRONTEND_URL", "https://map-app-frontend.netlify.app")
     end
 
     origins(*allowed_origins)

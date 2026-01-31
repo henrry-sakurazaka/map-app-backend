@@ -32,8 +32,8 @@ module MapAppBackend
     config.api_only = true
 
     # Rails APIモードでもセッションを使えるようにする
-    # config.middleware.use ActionDispatch::Cookies
-    # config.middleware.use ActionDispatch::Session::CookieStore, key: "_myapp_session"
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: "_myapp_session"
 
     config.autoload_paths << Rails.root.join("app/middleware")
     config.eager_load_paths << Rails.root.join("app/middleware")
