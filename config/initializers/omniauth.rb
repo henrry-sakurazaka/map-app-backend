@@ -31,5 +31,7 @@ end
 # OmniAuth のエンドポイントを API 配下に変更
 OmniAuth.config.path_prefix = "/api/v1/oauth"
 
+OmniAuth.config.allowed_request_methods = %i[get post]
+
 # リクエスト検証フェーズを無効化（API-only + SPA 用）
 OmniAuth.config.request_validation_phase = lambda { |_env| true }
