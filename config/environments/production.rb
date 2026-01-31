@@ -87,8 +87,7 @@ Rails.application.configure do
 
   # production.rb
   config.session_store :cookie_store,
-    key: '_map_app_session',
+    key: "_map_app_session",
     same_site: :none,
     secure: true
-
 end
