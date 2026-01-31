@@ -16,7 +16,7 @@ Rails.application.routes.draw do
       get "reverse-geocode", to: "reverse_geocode#index"
       get "ogp_preview",     to: "ogp_preview#show"
 
-      resources :stores, only: [:index]
+      resources :stores, only: [ :index ]
     end
   end
 
@@ -29,4 +29,3 @@ Rails.application.routes.draw do
     !req.path.starts_with?("/rails/active_storage")
   }
 end
-
