@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
-  get "/auth/:provider",
-    to: "api/v1/omniauth_callbacks#passthru",
-    constraints: { provider: "line" }
-
-  get "/auth/:provider/callback",
-      to: "api/v1/omniauth_callbacks#callback"
+  # --- OAuth & API ---
+  get "/auth/:provider", to: "api/v1/omniauth_callbacks#passthru",
+      constraints: { provider: "line" }
+  get "/auth/:provider/callback", to: "api/v1/omniauth_callbacks#callback"
 
   namespace :api do
     namespace :v1 do
@@ -19,10 +17,15 @@ Rails.application.routes.draw do
       get "ogp_preview",     to: "ogp_preview#show"
 
       resources :stores, only: [ :index ]
-
-      # namespace :auth do
-      #   post "refresh", to: "refresh#refresh"
-      # end
     end
   end
+
+  # --- フロント用ルート ---
+  get "home/index"           # HomeController#index 用ルート
+  root to: "home#index"      # root_path が生成される
+
+  # React/Vite 用 catch-all
+  get "*path", to: "home#index", constraints: ->(req) {
+    !req.path.starts_with?("/rails/active_storage")
+  }
 end
