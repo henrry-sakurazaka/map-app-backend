@@ -6,7 +6,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      get "/api/v1/oauth/:provider/callback", to: "api/v1/omniauth_callbacks#callback"
       get  "oauth/:provider", to: "omniauth_callbacks#passthru"
       get  "oauth/:provider/callback", to: "omniauth_callbacks#callback"
       post "auth/login",        to: "auth/auth#login"
