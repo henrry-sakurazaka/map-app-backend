@@ -14,8 +14,15 @@ test:
   database: map_app_backend_test
 
 production:
-  <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  primary:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+
+  cable:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+
+
 
 
 # # PostgreSQL. Versions 9.3 and up are supported.
