@@ -29,7 +29,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
 end
 
 # OmniAuth のエンドポイントを API 配下に変更
-OmniAuth.config.path_prefix = "/api/v1/oauth"
+# OmniAuth.config.path_prefix = "/api/v1/oauth"
+OmniAuth.config.path_prefix = "/auth"
 
 OmniAuth.config.allowed_request_methods = %i[get post]
 
