@@ -6,6 +6,8 @@ module Api
 
       # OAuth コールバック
       def callback
+        Rails.logger.error "=== CALLBACK CONTROLLER HIT ==="
+        raise "CALLBACK_HIT"
         auth = request.env["omniauth.auth"]
         provider = params[:provider]
 
