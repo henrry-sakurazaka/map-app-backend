@@ -37,7 +37,7 @@ gem "thruster", require: false
 
 gem "rack-cors"
 
-gem "bcrypt", "~> 3.1.18"
+gem "bcrypt", "~> 3.1.21"
 
 gem "omniauth"
 
