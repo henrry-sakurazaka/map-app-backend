@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  # API向けの認証フィルター
+  # API向けの認証フィルター//////
   before_action :authenticate_user!
 
   attr_reader :current_user
