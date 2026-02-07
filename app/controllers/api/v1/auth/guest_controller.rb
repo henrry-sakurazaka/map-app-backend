@@ -1,4 +1,6 @@
-# app/controllers/api/v1/auth/guest_controller.rb////////////////
+
+# app/controllers/api/v1/auth/guest_controller.rb/////////////////
+
 module Api
   module V1
     module Auth
