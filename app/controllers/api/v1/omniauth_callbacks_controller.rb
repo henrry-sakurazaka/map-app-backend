@@ -34,7 +34,7 @@ module Api
 
       redirect_to "#{frontend_url}/oauth-callback?token=#{token}",
                   allow_other_host: true
-      end 
+      end
     end
   end
 end
