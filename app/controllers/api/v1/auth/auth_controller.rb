@@ -41,7 +41,7 @@ module Api
             header = request.headers["Authorization"]
             if header
               token = header.split(" ").last
-              decoded = JWT.decode(token, Rails.application.credentials.secret_key_base)[0]
+              decoded = JWT.decode(token, Rails.application.secret_key_base)[0]
               @current_user = User.find(decoded["user_id"])
             else
               @current_user = current_user_from_session
