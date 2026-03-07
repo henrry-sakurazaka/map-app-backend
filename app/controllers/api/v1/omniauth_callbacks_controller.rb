@@ -3,7 +3,7 @@ module Api
     class OmniauthCallbacksController < ApplicationController
       # callback と passthru は認証不要
       skip_before_action :authenticate_user!, only: [ :callback, :passthru ]
-     
+
     def passthru
       render json: { error: "Provider not supported" }, status: 404
     end
