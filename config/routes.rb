@@ -6,8 +6,10 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      # get  "oauth/:provider", to: "omniauth_callbacks#passthru"
-      # get  "oauth/:provider/callback", to: "omniauth_callbacks#callback"
+      # ローカル開発環境用で使用
+      get  "oauth/:provider", to: "omniauth_callbacks#passthru"
+      get  "oauth/:provider/callback", to: "omniauth_callbacks#callback"
+      # ////////////////////////////////////////////////
       post "auth/login",        to: "auth/auth#login"
       post "auth/register",     to: "auth/auth#register"
       post "auth/guest",        to: "auth/guest#create"
@@ -25,7 +27,15 @@ Rails.application.routes.draw do
   root to: "home#index"      # root_path が生成される
 
   # React/Vite 用 catch-all
+  # get "*path", to: "home#index", constraints: ->(req) {
+  #   !req.path.starts_with?("/rails/active_storage") &&
+  #   !req.path.starts_with?("/auth")
+  # }
+
+  # React/Vite SPA fallback
   get "*path", to: "home#index", constraints: ->(req) {
-    !req.path.starts_with?("/rails/active_storage")
+    !req.path.start_with?("/rails") &&
+    !req.path.start_with?("/auth") &&
+    !req.path.start_with?("/api")
   }
 end

@@ -72,4 +72,6 @@ Rails.application.configure do
 
   config.hosts << "dev-auth.offsetcodecraft.site"
   config.hosts << "localhost"
+
+  config.action_dispatch.cookies_same_site_protection = :none
 end
