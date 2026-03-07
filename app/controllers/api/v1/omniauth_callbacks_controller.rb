@@ -3,11 +3,20 @@ module Api
     class OmniauthCallbacksController < ApplicationController
       # callback と passthru は認証不要
       skip_before_action :authenticate_user!, only: [ :callback, :passthru ]
+
+    def passthru
+      render json: { error: "Provider not supported" }, status: 404
+    end
+
     def callback
       Rails.logger.info "=== CALLBACK CONTROLLER HIT ==="
 
       auth = request.env["omniauth.auth"]
       frontend_url = ENV.fetch("FRONTEND_URL", "http://localhost:5173")
+
+      unless frontend_url.start_with?("https://map-app-frontend")
+        raise "Invalid redirect host"
+      end
 
       unless auth
         Rails.logger.error "=== OMNIAUTH.AUTH IS NIL ==="
