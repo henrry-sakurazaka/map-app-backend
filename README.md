@@ -89,6 +89,8 @@ Reactの地図ライブラリを使用し
 
 ![UI紹介](./public/map-app-login.png)
 
+### CI/CDパイプラインテスト通過の画像です
+![テスト通過](./public/CI:CD-img.png)
 ---
 
 ## 🚀 今後の改善
