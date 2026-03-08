@@ -14,10 +14,6 @@ module Api
       auth = request.env["omniauth.auth"]
       frontend_url = ENV.fetch("FRONTEND_URL", "http://localhost:5173")
 
-      unless frontend_url.start_with?("https://map-app-frontend")
-        raise "Invalid redirect host"
-      end
-
       unless auth
         Rails.logger.error "=== OMNIAUTH.AUTH IS NIL ==="
         redirect_to "#{frontend_url}/login?error=oauth_failed",
