@@ -44,7 +44,8 @@ module Api
               decoded = JWT.decode(token, Rails.application.secret_key_base)[0]
               @current_user = User.find(decoded["user_id"])
             else
-              @current_user = current_user_from_session
+              # @current_user = current_user_from_session
+              @current_user = nil
             end
           end
 
@@ -55,6 +56,17 @@ module Api
               render json: { user: user_json(user), token: token }
             else
               render json: { error: "Invalid email or password" }, status: :unauthorized
+            end
+          end
+
+          def register
+            user = User.new(user_params)
+
+            if user.save
+              token = generate_jwt(user)
+              render json: { user: user_json(user), token: token }, status: :created
+            else
+              render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
             end
           end
 
@@ -87,6 +99,10 @@ module Api
 
           def current_user
             @current_user
+          end
+
+          def user_params
+            params.permit(:email, :password, :name)
           end
       end
     end

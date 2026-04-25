@@ -12,6 +12,7 @@ development:
 test:
   <<: *default
   database: map_app_backend_test
+  url: <%= nil %>
 
 production:
   primary:
