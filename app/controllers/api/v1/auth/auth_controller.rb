@@ -14,25 +14,20 @@ module Api
             begin
               decoded = JWT.decode(token, Rails.application.credentials.secret_key_base)[0]
               @current_user = User.find(decoded["user_id"])
-            rescue
+            rescue => e
+              Rails.logger.error("JWT error: #{e.message}")
               @current_user = nil
             end
           end
 
           if @current_user
             render json: {
-              id: @current_user.id,
-              name: @current_user.name,
-              email: @current_user.email,
-              provider: @current_user.provider,
-              uid: @current_user.uid,
-              image_url: @current_user.image_url
+              email: @current_user.email
             }
           else
             render json: {}
           end
         end
-
         def authenticate_user!
           header = request.headers["Authorization"]
 
