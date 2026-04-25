@@ -1,4 +1,3 @@
-
 module Api
   module V1
     module Auth
@@ -6,41 +5,35 @@ module Api
         skip_before_action :authenticate_user!, only: [ :guest, :login ]
         before_action :authenticate_user!, only: [ :current ]
 
+        # JWT署名キーを1箇所に固定
+        JWT_SECRET = Rails.application.credentials.secret_key_base
+
         # GET /api/v1/auth/current_user
         def current
-          token = request.headers["Authorization"]&.split(" ")&.last
-
-          if token
-            begin
-              decoded = JWT.decode(token, Rails.application.credentials.secret_key_base)[0]
-              @current_user = User.find(decoded["user_id"])
-            rescue => e
-              Rails.logger.error("JWT error: #{e.message}")
-              @current_user = nil
-            end
-          end
-
           if @current_user
             render json: {
-              email: @current_user.email
+              id: @current_user.id,
+              name: @current_user.name,
+              email: @current_user.email,
+              provider: @current_user.provider,
+              uid: @current_user.uid,
+              image_url: @current_user.image_url
             }
           else
             render json: {}
           end
         end
+
         def authenticate_user!
           header = request.headers["Authorization"]
+          token = header&.split(" ")&.last
 
-          if header
-            token = header.split(" ").last
+          return @current_user = nil unless token
 
-            begin
-              decoded = JWT.decode(token, Rails.application.credentials.secret_key_base)[0]
-              @current_user = User.find(decoded["user_id"])
-            rescue
-              @current_user = nil
-            end
-          else
+          begin
+            decoded = JWT.decode(token, JWT_SECRET)[0]
+            @current_user = User.find(decoded["user_id"])
+          rescue
             @current_user = nil
           end
         end
@@ -88,11 +81,7 @@ module Api
 
         def generate_jwt(user)
           payload = { user_id: user.id, exp: 24.hours.from_now.to_i }
-          JWT.encode(payload, Rails.application.credentials.secret_key_base)
-        end
-
-        def current_user
-          @current_user
+          JWT.encode(payload, JWT_SECRET)
         end
 
         def user_params
