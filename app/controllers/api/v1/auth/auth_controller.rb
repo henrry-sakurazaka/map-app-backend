@@ -2,37 +2,26 @@ module Api
   module V1
     module Auth
       class AuthController < ApplicationController
+        JWT_SECRET = Rails.application.secret_key_base
+
         skip_before_action :authenticate_user!, only: [ :guest, :login ]
         before_action :authenticate_user!, only: [ :current ]
 
-        # JWT署名キーを1箇所に固定
-        JWT_SECRET = Rails.application.credentials.secret_key_base
-
-        # GET /api/v1/auth/current_user
         def current
-          if @current_user
-            render json: {
-              id: @current_user.id,
-              name: @current_user.name,
-              email: @current_user.email,
-              provider: @current_user.provider,
-              uid: @current_user.uid,
-              image_url: @current_user.image_url
-            }
-          else
-            render json: {}
-          end
+          render json: current_user ? {
+            email: current_user.email
+          } : {}
         end
 
         def authenticate_user!
           header = request.headers["Authorization"]
-          token = header&.split(" ")&.last
+          return @current_user = nil unless header
 
-          return @current_user = nil unless token
+          token = header.split(" ").last
 
           begin
             decoded = JWT.decode(token, JWT_SECRET)[0]
-            @current_user = User.find(decoded["user_id"])
+            @current_user = User.find_by(id: decoded["user_id"])
           rescue
             @current_user = nil
           end
@@ -42,8 +31,10 @@ module Api
           user = User.find_by(email: params[:email])
 
           if user&.authenticate(params[:password])
-            token = generate_jwt(user)
-            render json: { user: user_json(user), token: token }
+            render json: {
+              user: user_json(user),
+              token: generate_jwt(user)
+            }
           else
             render json: { error: "Invalid email or password" }, status: :unauthorized
           end
@@ -53,8 +44,10 @@ module Api
           user = User.new(user_params)
 
           if user.save
-            token = generate_jwt(user)
-            render json: { user: user_json(user), token: token }, status: :created
+            render json: {
+              user: user_json(user),
+              token: generate_jwt(user)
+            }, status: :created
           else
             render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
           end
@@ -62,11 +55,15 @@ module Api
 
         def guest
           user = User.create_guest!
-          token = generate_jwt(user)
-          render json: { user: user_json(user), token: token }
+          render json: { user: user_json(user), token: generate_jwt(user) }
         end
 
         private
+
+        def generate_jwt(user)
+          payload = { user_id: user.id, exp: 24.hours.from_now.to_i }
+          JWT.encode(payload, JWT_SECRET)
+        end
 
         def user_json(user)
           {
@@ -79,9 +76,8 @@ module Api
           }
         end
 
-        def generate_jwt(user)
-          payload = { user_id: user.id, exp: 24.hours.from_now.to_i }
-          JWT.encode(payload, JWT_SECRET)
+        def current_user
+          @current_user
         end
 
         def user_params
