@@ -18,7 +18,7 @@ RSpec.describe "Users API", type: :request do
   end
 
     it "emailがないと失敗する" do
-    post "/api/v1/auth/register", params: { 
+    post "/api/v1/auth/register", params: {
       email: "",
       password: "password123"
     }
@@ -92,7 +92,7 @@ RSpec.describe "Users API", type: :request do
     expect(json).to eq({})
   end
 
-  
+
   describe "GET /api/v1/stores" do
     it "店舗一覧が取得できる" do
       Store.destroy_all
