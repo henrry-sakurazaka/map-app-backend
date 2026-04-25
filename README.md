@@ -77,7 +77,7 @@ Reactの地図ライブラリを使用し
 | E2Eテスト | Playwright | マルチブラウザ対応でCI環境でも安定して動作する |
 | CI/CD | GitHub Actions | GitHubと統合しやすく、テスト・デプロイの自動化が可能 |
 
----
+----
 
 ## 🖥️ UI
 
