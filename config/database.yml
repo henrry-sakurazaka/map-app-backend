@@ -18,19 +18,24 @@ production:
   primary:
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
+    prepared_statements: false
 
   cable:
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
+    prepared_statements: false
 
   queue:
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
+    prepared_statements: false
 
   cache:
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
+    prepared_statements: false
 
+    
 # # PostgreSQL. Versions 9.3 and up are supported.
 # #
 # # Install the pg driver:
