@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
       get "reverse-geocode", to: "reverse_geocode#index"
       get "ogp_preview",     to: "ogp_preview#show"
+      get "overpass",        to: "overpass#index"
 
       resources :stores, only: [ :index ]
     end
