@@ -51,10 +51,11 @@ class Api::V1::OverpassController < ApplicationController
     end
 
     # すべてのOverpass APIが失敗した場合
-    Rails.logger.error("❌ すべてのOverpass APIが利用できません")
+    Rails.logger.error("❌ すべてのOverpass APIが利用できません。混雑が予想されます。")
 
     render json: {
-      elements: []
-    }, status: :ok
+      elements: [],
+      error: "overpass API is unavailable. Please try again later."
+    }, status: :service_unavailable
   end
 end
