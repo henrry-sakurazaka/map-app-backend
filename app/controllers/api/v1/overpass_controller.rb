@@ -1,4 +1,5 @@
 class Api::V1::OverpassController < ApplicationController
+    skip_before_action :authenticate_user!
     def index
         lat = params[:lat]
         lon = params[:lon]
@@ -7,10 +8,10 @@ class Api::V1::OverpassController < ApplicationController
         query = <<~QUERY
             [out:json][timeout:15];
             (
-                node(["shop"](around:#{radius},#{lat},#{lon});
-                node["amenity"~"cafe|restaurant|bar|fast_food"](around:#{radius},
-                #{lat},#{lon});
-                out center;
+                node["shop"](around:#{radius},#{lat},#{lon});
+                node["amenity"~"cafe|restaurant|bar|fast_food"](around:#{radius},#{lat},#{lon});
+            );
+            out center;
         QUERY
 
         urls = [
@@ -48,5 +49,15 @@ class Api::V1::OverpassController < ApplicationController
         render json: {
             elements: []
         }, status: :ok
-    end
+
+        if response.success?
+            Rails.logger.info("✅ Overpass成功: #{url}")
+            render json: JSON.parse(response.body)
+            return
+        end
+
+        Rails.logger.warn(
+            "❌ Overpass失敗: #{response.code} #{url}"
+        )
+end
 end
