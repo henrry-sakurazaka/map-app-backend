@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get  "oauth/:provider", to: "omniauth_callbacks#passthru"
       get  "oauth/:provider/callback", to: "omniauth_callbacks#callback"
       # ////////////////////////////////////////////////
+      get "health",          to: "auth/health#show"
       post "auth/login",        to: "auth/auth#login"
       post "auth/register",     to: "auth/auth#register"
       post "auth/guest",        to: "auth/guest#create"
