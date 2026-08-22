@@ -1,14 +1,43 @@
-# config/routes.rb
-
 Rails.application.routes.draw do
-  # APIバージョン1を定義
+  # --- OAuth & API ---
+  get "/auth/:provider", to: "api/v1/omniauth_callbacks#passthru",
+      constraints: { provider: "line" }
+  get "/auth/:provider/callback", to: "api/v1/omniauth_callbacks#callback"
+
   namespace :api do
     namespace :v1 do
-      # GET /api/v1/stores に対応するルートを定義
-      resources :stores, only: [:index]
+      # ローカル開発環境用で使用
+      get  "oauth/:provider", to: "omniauth_callbacks#passthru"
+      get  "oauth/:provider/callback", to: "omniauth_callbacks#callback"
+      # ////////////////////////////////////////////////
+      get "health",          to: "auth/health#show"
+      post "auth/login",        to: "auth/auth#login"
+      post "auth/register",     to: "auth/auth#register"
+      post "auth/guest",        to: "auth/guest#create"
+      get  "auth/current_user", to: "auth/auth#current"
+
+      get "reverse-geocode", to: "reverse_geocode#index"
+      get "ogp_preview",     to: "ogp_preview#show"
+      get "overpass",        to: "overpass#index"
+
+      resources :stores, only: [ :index ]
     end
   end
-   # アプリケーションの健全性チェック用のルート（そのまま残す）
-  get "up" => "rails/health#show", as: :rails_health_check
-  # その他のルートがあれば追記
+
+  # --- フロント用ルート ---
+  get "home/index"           # HomeController#index 用ルート
+  root to: "home#index"      # root_path が生成される
+
+  # React/Vite 用 catch-all
+  # get "*path", to: "home#index", constraints: ->(req) {
+  #   !req.path.starts_with?("/rails/active_storage") &&
+  #   !req.path.starts_with?("/auth")
+  # }
+
+  # React/Vite SPA fallback
+  get "*path", to: "home#index", constraints: ->(req) {
+    !req.path.start_with?("/rails") &&
+    !req.path.start_with?("/auth") &&
+    !req.path.start_with?("/api")
+  }
 end
