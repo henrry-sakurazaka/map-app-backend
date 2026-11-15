@@ -80,7 +80,7 @@ class Api::V1::OverpassController < ApplicationController
           "body=#{response.body.to_s.first(500)}"
         )
 
-        if [429, 502, 503, 504].include?(response.code.to_i) &&
+        if [ 429, 502, 503, 504 ].include?(response.code.to_i) &&
            attempt < max_attempts
 
           wait_time = 2**(attempt - 1)
